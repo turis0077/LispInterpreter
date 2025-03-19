@@ -1,14 +1,13 @@
 package com.lispinterpreter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Evaluator {
-    private Map<String, Object> variables;
+    private LispEnvironment environment;
 
     public Evaluator() {
-        this.variables = new HashMap<>();
+        this.environment = new LispEnvironment();
     }
 
     public Object evaluar(Object expresion) {
@@ -27,42 +26,39 @@ public class Evaluator {
                 throw new RuntimeException("Error: Operador no válido.");
             }
         } else if (expresion instanceof String) {
-            if (variables.containsKey(expresion)) {
-                return variables.get(expresion);
-            }
-            throw new RuntimeException("Error: Variable no definida: " + expresion);
+            return environment.obtenerVariable((String) expresion);
         } else {
             return expresion;
         }
     }
 
     private Object evaluarOperacion(String operador, List<?> argumentos) {
+        List<Object> valoresEvaluados = argumentos.stream()
+                .map(this::evaluar)
+                .collect(Collectors.toList());
+        
         switch (operador) {
             case "+":
-                return sumar(argumentos);
+                return LispBuiltinFunctions.sumar(argumentos);
+            case "-":
+                return LispBuiltinFunctions.restar(argumentos);
             case "*":
-                return multiplicar(argumentos);
+                return LispBuiltinFunctions.multiplicar(argumentos);
             case "setq":
                 return asignarVariable(argumentos);
+            case "defun":
+                return definirFuncion(argumentos);
+            case "print":
+                return imprimir(argumentos);
+            case "<":
+                return LispBuiltinFunctions.compararMenor(argumentos);
+            case ">":
+                return LispBuiltinFunctions.compararMayor(argumentos);
+            case "equal?":
+                return LispBuiltinFunctions.compararIgual(argumentos);
             default:
-                throw new RuntimeException("Error: Operador no válido: " + operador);
+                return evaluarFuncion(operador, argumentos);
         }
-    }
-
-    private int sumar(List<?> argumentos) {
-        int resultado = 0;
-        for (Object arg : argumentos) {
-            resultado += (int) evaluar(arg);
-        }
-        return resultado;
-    }
-
-    private int multiplicar(List<?> argumentos) {
-        int resultado = 1;
-        for (Object arg : argumentos) {
-            resultado *= (int) evaluar(arg);
-        }
-        return resultado;
     }
 
     private Object asignarVariable(List<?> argumentos) {
@@ -72,7 +68,45 @@ public class Evaluator {
 
         String nombre = (String) argumentos.get(0);
         Object valor = evaluar(argumentos.get(1));
-        variables.put(nombre, valor);
+        environment.guardarVariable(nombre, valor);
         return valor;
+    }
+
+    private Object definirFuncion(List<?> argumentos) {
+        if (argumentos.size() != 3) {
+            throw new RuntimeException("Error: defun requiere exactamente 3 argumentos.");
+        }
+
+        String nombre = (String) argumentos.get(0);
+        List<String> parametros = (List<String>) argumentos.get(1);
+        Object cuerpo = argumentos.get(2);
+
+        LispFunction funcion = new LispFunction(nombre, parametros, cuerpo);
+        environment.guardarFuncion(nombre, funcion);
+        return "Función '" + nombre + "' definida.";
+    }
+
+    private Object imprimir(List<?> argumentos) {
+        for (Object arg : argumentos) {
+            System.out.print(evaluar(arg) + " ");
+        }
+        System.out.println();
+        return null;
+    }
+
+    private Object evaluarCondicional(List<?> argumentos) {
+        if (argumentos.size() != 3) {
+            throw new RuntimeException("Error: if requiere exactamente 3 argumentos.");
+        }
+        boolean condicion = (boolean) argumentos.get(0);
+        return condicion ? argumentos.get(1) : argumentos.get(2);
+    }
+
+    private Object evaluarFuncion(String nombre, List<?> argumentos) {
+        LispFunction funcion = environment.obtenerFuncion(nombre);
+        if (funcion == null) {
+            throw new RuntimeException("Error: Función no definida: " + nombre);
+        }
+        return funcion.ejecutar(argumentos, environment);
     }
 }

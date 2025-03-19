@@ -1,6 +1,5 @@
 package com.lispinterpreter;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,13 +31,23 @@ public class LispFunction {
             throw new RuntimeException("Error: Número incorrecto de argumentos para la función '" + nombre + "'");
         }
 
-        Map<String, Object> contexto = new HashMap<>(entorno.obtenerVariable());
+        LispEnvironment nuevoEntorno = new LispEnvironment();
+        nuevoEntorno.copiarDesde(entorno);
 
         for (int i = 0; i < parametros.size(); i++) {
-            contexto.put(parametros.get(i), argumentos.get(i));
+            nuevoEntorno.guardarVariable(parametros.get(i), argumentos.get(i));
         }
 
-        Evaluator evaluador = new Evaluator();
-        return evaluador.evaluarConContexto(cuerpo, contexto);
+        Evaluator evaluador = new Evaluator(nuevoEntorno);
+        if (cuerpo instanceof List) {
+            List<?> listaCuerpo = (List<?>) cuerpo;
+            Object resultado = null;
+            for (Object instruccion : listaCuerpo) {
+                resultado = evaluador.evaluar(instruccion);
+            }
+            return resultado; // Retorna el último resultado evaluado
+        } else {
+            return evaluador.evaluar(cuerpo);
+        }
     }
 }
