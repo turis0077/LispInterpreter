@@ -14,7 +14,7 @@ public class Tokenizer {
 
     public List<Token> tokenizar() {
         List<Token> tokens = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\(|\\)|[+\\-*/<>=]|\\w+|\\d+");
+        Pattern pattern = Pattern.compile("\\(|\\)|[+\\-*/<>=]|[a-zA-Z_][a-zA-Z0-9_]*|\\d+");
         Matcher matcher = pattern.matcher(entrada);
 
         while (matcher.find()) {
