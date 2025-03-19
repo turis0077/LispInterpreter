@@ -32,7 +32,7 @@ public class LispFunction {
             throw new RuntimeException("Error: Número incorrecto de argumentos para la función '" + nombre + "'");
         }
 
-        Map<String, Object> contexto = new HashMap<>(entorno.getVariables());
+        Map<String, Object> contexto = new HashMap<>(entorno.obtenerVariable());
 
         for (int i = 0; i < parametros.size(); i++) {
             contexto.put(parametros.get(i), argumentos.get(i));
