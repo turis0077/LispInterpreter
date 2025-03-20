@@ -42,4 +42,12 @@ public class LispEnvironment {
         funciones.put(nombre, funcion);
     }
 
+    public boolean existeVariable(String nombre) {
+        return variables.containsKey(nombre);
+    }
+
+    public boolean existeFuncion(String nombre) {
+        return funciones.containsKey(nombre);
+    }
+
 }

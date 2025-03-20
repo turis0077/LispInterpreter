@@ -1,7 +1,6 @@
 package com.lispinterpreter;
 
 import java.util.List;
-import java.util.Map;
 
 public class LispFunction {
     private String nombre;

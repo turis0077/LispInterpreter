@@ -30,7 +30,13 @@ public class Evaluator {
                 throw new RuntimeException("Error: Operador no válido.");
             }
         } else if (expresion instanceof String) {
-            return environment.obtenerVariable((String) expresion);
+            if (environment.existeVariable((String) expresion)) {
+                return environment.obtenerVariable((String) expresion);
+            }
+            if (environment.existeFuncion((String) expresion)) {
+                return environment.obtenerFuncion((String) expresion);
+            }
+            throw new RuntimeException("Error: Variable no definida: " + expresion);
         } else {
             return expresion;
         }
@@ -54,6 +60,8 @@ public class Evaluator {
                 return definirFuncion(argumentos);
             case "print":
                 return imprimir(argumentos);
+            case "if":
+                return evaluarCondicional(valoresEvaluados);
             case "<":
                 return LispBuiltinFunctions.compararMenor(argumentos);
             case ">":
@@ -107,10 +115,10 @@ public class Evaluator {
     }
 
     private Object evaluarFuncion(String nombre, List<?> argumentos) {
-        LispFunction funcion = environment.obtenerFuncion(nombre);
-        if (funcion == null) {
+        if (!environment.existeFuncion(nombre)) {
             throw new RuntimeException("Error: Función no definida: " + nombre);
         }
+        LispFunction funcion = environment.obtenerFuncion(nombre);
         return funcion.ejecutar(argumentos, environment);
     }
 }
