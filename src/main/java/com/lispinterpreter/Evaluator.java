@@ -10,6 +10,10 @@ public class Evaluator {
         this.environment = new LispEnvironment();
     }
 
+    public Evaluator(LispEnvironment environment) {
+        this.environment = environment;
+    }
+
     public Object evaluar(Object expresion) {
         if (expresion instanceof List) {
             List<?> lista = (List<?>) expresion;

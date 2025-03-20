@@ -12,6 +12,14 @@ public class LispEnvironment {
         this.funciones = new HashMap<>();
     }
 
+    public Map<String, Object> getVariables() {
+        return variables;
+    }
+
+    public Map<String, LispFunction> getFunciones() {
+        return funciones;
+    }
+
     public Object obtenerVariable(String nombre) {
         if (!variables.containsKey(nombre)) {
             throw new RuntimeException("Error: Variable no definida: " + nombre);

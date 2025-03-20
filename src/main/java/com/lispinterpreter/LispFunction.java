@@ -32,7 +32,14 @@ public class LispFunction {
         }
 
         LispEnvironment nuevoEntorno = new LispEnvironment();
-        nuevoEntorno.copiarDesde(entorno);
+
+        for (String var : entorno.getVariables().keySet()) {
+            nuevoEntorno.guardarVariable(var, entorno.obtenerVariable(var));
+        }
+
+        for (String func : entorno.getFunciones().keySet()) {
+            nuevoEntorno.guardarFuncion(func, entorno.obtenerFuncion(func));
+        }
 
         for (int i = 0; i < parametros.size(); i++) {
             nuevoEntorno.guardarVariable(parametros.get(i), argumentos.get(i));
@@ -45,7 +52,7 @@ public class LispFunction {
             for (Object instruccion : listaCuerpo) {
                 resultado = evaluador.evaluar(instruccion);
             }
-            return resultado; // Retorna el último resultado evaluado
+            return resultado;
         } else {
             return evaluador.evaluar(cuerpo);
         }
