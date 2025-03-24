@@ -10,16 +10,29 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Pruebas unitarias para la clase REPL.
+ * Se simula la entrada interactiva para verificar el mensaje de salida.
+ */
 public class TestREPL {
+    /** Flujo para capturar la salida estándar. */
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    /** Flujo original de salida. */
     private final PrintStream originalOut = System.out;
+    /** Flujo original de entrada. */
     private final java.io.InputStream originalIn = System.in;
 
+    /**
+     * Configura el entorno de pruebas redirigiendo la salida estándar.
+     */
     @Before
     public void setUp() {
         System.setOut(new PrintStream(outContent));
     }
 
+    /**
+     * Restaura los flujos de entrada y salida originales.
+     */
     @After
     public void tearDown() {
         System.setOut(originalOut);

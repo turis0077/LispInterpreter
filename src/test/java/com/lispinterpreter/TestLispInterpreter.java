@@ -8,23 +8,40 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+/**
+ * Clase de pruebas unitarias para el intérprete LISP.
+ * Se evalúan variables, impresión, operaciones aritméticas, condicionales, definición de funciones y quote.
+ */
 public class TestLispInterpreter {
+    /** Evaluador utilizado para las pruebas. */
     private Evaluator evaluator;
+    /** Flujo para capturar la salida estándar. */
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    /** Flujo original de salida. */
     private final PrintStream originalOut = System.out;
 
+    /**
+     * Configura el entorno de pruebas, creando el evaluador y redirigiendo la salida estándar.
+     */
     @Before
     public void setUp() {
         evaluator = new Evaluator();
         System.setOut(new PrintStream(outContent));
     }
 
+    /**
+     * Restaura el flujo de salida estándar original.
+     */
     @After
     public void tearDown() {
         System.setOut(originalOut);
     }
 
-    // Método auxiliar para evaluar una cadena de código Lisp.
+    /**
+     * Método auxiliar que tokeniza, parsea y evalúa una cadena de código LISP.
+     * @param codigo Expresión LISP a evaluar.
+     * @return Resultado de la evaluación.
+     */
     private Object eval(String code) {
         Tokenizer tokenizer = new Tokenizer(code);
         List<Token> tokens = tokenizer.tokenizar();
