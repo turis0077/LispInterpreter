@@ -13,9 +13,9 @@ public class Tokenizer {
     }
 
     public List<Token> tokenizar() {
-        List<Token> tokens = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\(|\\)|[+\\-*/<>=]|\\w+|\\d+");
+        Pattern pattern = Pattern.compile("\\(|\\)|'|[+\\-*/<>=]|[a-zA-Z_][a-zA-Z0-9_?]*|\\d+");
         Matcher matcher = pattern.matcher(entrada);
+        List<Token> tokens = new ArrayList<>();
 
         while (matcher.find()) {
             String valor = matcher.group();
@@ -24,6 +24,8 @@ public class Tokenizer {
                 tokens.add(new Token("PAREN_OPEN", valor));
             } else if (valor.equals(")")) {
                 tokens.add(new Token("PAREN_CLOSE", valor));
+            } else if (valor.equals("'")) {
+                tokens.add(new Token("QUOTE", valor));
             } else if (valor.matches("\\d+")) {
                 tokens.add(new Token("NUMBER", valor));
             } else {

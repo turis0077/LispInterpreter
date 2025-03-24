@@ -20,7 +20,14 @@ public class Parser {
         Token token = tokens.get(posicion);
         posicion++;
 
-        if (token.getTipo().equals("PAREN_OPEN")) {
+        if (token.getTipo().equals("QUOTE")) {
+            // Convierte 'exp en (quote exp)
+            Object quotedExpr = parsear();
+            List<Object> listQuote = new ArrayList<>();
+            listQuote.add("quote");
+            listQuote.add(quotedExpr);
+            return listQuote;
+        } else if (token.getTipo().equals("PAREN_OPEN")) {
             List<Object> expresion = new ArrayList<>();
             while (posicion < tokens.size() && !tokens.get(posicion).getTipo().equals("PAREN_CLOSE")) {
                 expresion.add(parsear());
@@ -33,7 +40,7 @@ public class Parser {
         } else if (token.getTipo().equals("NUMBER")) {
             return Integer.parseInt(token.getValor());
         } else {
-            return token.getValor(); // Es un símbolo o nombre de variable/función
+            return token.getValor(); // Símbolo o nombre de variable/función
         }
     }
 }
