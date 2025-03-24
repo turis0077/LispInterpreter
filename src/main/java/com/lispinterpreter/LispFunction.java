@@ -1,6 +1,7 @@
 package com.lispinterpreter;
 
 import java.util.List;
+import java.util.Map;
 
 public class LispFunction {
     private String nombre;
@@ -32,12 +33,11 @@ public class LispFunction {
 
         LispEnvironment nuevoEntorno = new LispEnvironment();
 
-        for (String var : entorno.getVariables().keySet()) {
-            nuevoEntorno.guardarVariable(var, entorno.obtenerVariable(var));
+        for (Map.Entry<String, Object> entry : entorno.getVariables().entrySet()) {
+            nuevoEntorno.guardarVariable(entry.getKey(), entry.getValue());
         }
-
-        for (String func : entorno.getFunciones().keySet()) {
-            nuevoEntorno.guardarFuncion(func, entorno.obtenerFuncion(func));
+        for (Map.Entry<String, LispFunction> entry : entorno.getFunciones().entrySet()) {
+            nuevoEntorno.guardarFuncion(entry.getKey(), entry.getValue());
         }
 
         for (int i = 0; i < parametros.size(); i++) {
@@ -45,15 +45,6 @@ public class LispFunction {
         }
 
         Evaluator evaluador = new Evaluator(nuevoEntorno);
-        if (cuerpo instanceof List) {
-            List<?> listaCuerpo = (List<?>) cuerpo;
-            Object resultado = null;
-            for (Object instruccion : listaCuerpo) {
-                resultado = evaluador.evaluar(instruccion);
-            }
-            return resultado;
-        } else {
-            return evaluador.evaluar(cuerpo);
-        }
+        return evaluador.evaluar(cuerpo);
     }
 }

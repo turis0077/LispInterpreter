@@ -49,5 +49,4 @@ public class LispEnvironment {
     public boolean existeFuncion(String nombre) {
         return funciones.containsKey(nombre);
     }
-
 }
