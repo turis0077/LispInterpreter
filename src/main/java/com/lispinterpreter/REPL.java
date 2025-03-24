@@ -1,7 +1,7 @@
 package com.lispinterpreter;
 
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class REPL {
     private Evaluator evaluator;
@@ -29,7 +29,9 @@ public class REPL {
                 Parser parser = new Parser(tokens);
                 Object expresion = parser.parsear();
                 Object resultado = evaluator.evaluar(expresion);
-                System.out.println(resultado);
+                if (resultado != null) {
+                    System.out.println(resultado);
+                }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
