@@ -50,6 +50,10 @@ public class TestLispInterpreter {
         return evaluator.evaluar(expr);
     }
 
+    /**
+     * Prueba la asignación de variables y su posterior recuperacion.
+     * Evalúa la expresión (setq x 10) y luego la variable x, esperando que ambas retornen 10.
+     */
     @Test
     public void testSetqAndVariableRetrieval() {
         // (setq x 10) debe devolver 10 y luego la variable "x" debe evaluarse a 10.
@@ -59,6 +63,11 @@ public class TestLispInterpreter {
         assertEquals(10, result2);
     }
 
+    /**
+     * Prueba la función integrada print.
+     * Asigna un valor a la variable x y verifica que se imprima en la salida estóndar,
+     * además se confirma que print retorne null.
+     */
     @Test
     public void testPrint() {
         // Se asigna "x" y se imprime su valor; se captura la salida por consola.
@@ -71,10 +80,40 @@ public class TestLispInterpreter {
         assertNull(result);
     }
 
+    /**
+     * Prueba la evaluacion de una expresión condicional (if).
+     */
     @Test
     public void testArithmetic() {
         // Prueba de operaciones anidadas: (+ 5 (* 2 3)) debe devolver 11.
         Object result = eval("(+ 5 (* 2 3))");
         assertEquals(11, result);
+    }
+
+    /**
+     * Prueba la definicion de funciones y su ejecucion recursiva.
+     * Define la funcion factorial y la evalua.
+     */
+    @Test
+    public void testDefunAndRecursion() {
+        Object resultadoDefun = eval("(defun fact (n) (if (equal? n 0) 1 (* n (fact (- n 1)))))");
+        assertEquals("Función 'fact' definida.", resultadoDefun);
+        Object resultadoFact = eval("(fact 5)");
+        assertEquals(120, resultadoFact);
+    }
+
+    /**
+     * Prueba la forma especial quote.
+     * Verifica que retorne una lista sin evalual la expresion.
+     */
+    @Test
+    public void testQuote() {
+        Object resultado = eval("'(+ 2 3)");
+        assertTrue(resultado instanceof List);
+        List<?> listaResultado = (List<?>) resultado;
+        assertEquals(3, listaResultado.size());
+        assertEquals("+", listaResultado.get(0));
+        assertEquals(2, listaResultado.get(1));
+        assertEquals(3, listaResultado.get(2));
     }
 }

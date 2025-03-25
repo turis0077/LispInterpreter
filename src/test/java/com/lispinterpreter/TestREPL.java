@@ -39,6 +39,10 @@ public class TestREPL {
         System.setIn(originalIn);
     }
 
+    /**
+     * Prueba la finalizacion correcta del programa al escribir la instancia "Salir"  como entrada.
+     * Se simula la entrada "salir" y verifica que en la salida estandar se incluya el mensaje "Saliendo del intérprete...".
+     */
     @Test
     public void testREPLExit() {
         // Simulamos que el usuario escribe "salir" para terminar la sesión.

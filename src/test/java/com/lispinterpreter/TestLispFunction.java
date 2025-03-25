@@ -14,7 +14,11 @@ import org.junit.Test;
 public class TestLispFunction {
     @Test
     public void testLispFunctionSum() {
-        /** Se define una función que suma dos números: (+ a b) */
+        /**
+         * Prueba la ejecución de una función definida que suma dos números.
+         * Se define una función "sum" que suma dos números: "(+ a b)".
+         * Se espera que al invocar la función con los argumentos 5 y 7, el resultado sea 12.
+         */
         List<String> parametros = new ArrayList<>();
         parametros.add("a");
         parametros.add("b");
@@ -25,11 +29,7 @@ public class TestLispFunction {
         cuerpo.add("b");
 
         LispFunction funcion = new LispFunction("sum", parametros, cuerpo);
-
-        /** Se crea un entorno (vacío, en este caso) para la ejecución de la función. */
         LispEnvironment entorno = new LispEnvironment();
-
-        /** Se preparan los argumentos: 5 y 7. */
         List<Object> argumentos = new ArrayList<>();
         argumentos.add(5);
         argumentos.add(7);
