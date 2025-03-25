@@ -38,8 +38,8 @@ public class TestLispInterpreter {
     }
 
     /**
-     * Método auxiliar que tokeniza, parsea y evalúa una cadena de código LISP.
-     * @param codigo Expresión LISP a evaluar.
+     * Metodo auxiliar que tokeniza, parsea y evalúa una cadena de código LISP.
+     * @param code Expresión LISP a evaluar.
      * @return Resultado de la evaluación.
      */
     private Object eval(String code) {
