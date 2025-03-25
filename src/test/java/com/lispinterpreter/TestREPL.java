@@ -45,7 +45,6 @@ public class TestREPL {
      */
     @Test
     public void testREPLExit() {
-        // Simulamos que el usuario escribe "salir" para terminar la sesión.
         String simulatedInput = "salir\n";
         ByteArrayInputStream in = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(in);
@@ -54,7 +53,6 @@ public class TestREPL {
         repl.iniciarREPL();
 
         String output = outContent.toString();
-        // Verifica que se muestre el mensaje de salida "Saliendo del intérprete..."
         assertTrue(output.contains("Saliendo del intérprete..."));
     }
 }
