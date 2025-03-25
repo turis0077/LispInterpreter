@@ -33,7 +33,7 @@ public class TestLispEnvironment {
     /**
      * Verifica que al intentar obtener una variable no definida se lance una excepción.
      */
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObtenerVariableNoDefinida() {
         LispEnvironment entorno = new LispEnvironment();
         entorno.obtenerVariable("z");
@@ -54,7 +54,7 @@ public class TestLispEnvironment {
     /**
      * Verifica que al intentar obtener una función no definida se lance una excepción.
      */
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObtenerFuncionNoDefinida() {
         LispEnvironment entorno = new LispEnvironment();
         entorno.obtenerFuncion("nonexistent");
